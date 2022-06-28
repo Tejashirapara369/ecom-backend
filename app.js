@@ -8,6 +8,8 @@ const productsRouter = require('./routers/product')
 const categoriesRoutes = require('./routers/category')
 const usersRoutes = require('./routers/user')
 const ordersRoutes = require('./routers/order')
+const authJwt = require('./helpers/jwt')
+const errorHandler = require('./helpers/error-handlers')
 
 require('dotenv/config')
 
@@ -17,7 +19,9 @@ const api = process.env.API_URL
 app.use(express.json())
 app.use(morgan('tiny'))
 app.use(cors())
+app.use(authJwt())
 app.options('*', cors())
+app.use(errorHandler)
 
 app.use(`${api}/product`, productsRouter)
 app.use(`${api}/categories`, categoriesRoutes)
@@ -29,7 +33,7 @@ mongoose
   .connect(process.env.CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    dbName: 'ecom-shop'
+    dbName: 'ecom-shop',
   })
   .then(() => {
     console.log('database connected successfuly!')
