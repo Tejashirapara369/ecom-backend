@@ -20,6 +20,7 @@ app.use(express.json())
 app.use(morgan('tiny'))
 app.use(cors())
 app.use(authJwt())
+app.use('/public/upload', express.static(__dirname+'/public/upload'))
 app.options('*', cors())
 app.use(errorHandler)
 
