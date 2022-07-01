@@ -24,7 +24,7 @@ app.use('/public/upload', express.static(__dirname+'/public/upload'))
 app.options('*', cors())
 app.use(errorHandler)
 
-app.use(`${api}/product`, productsRouter)
+app.use(`${api}/products`, productsRouter)
 app.use(`${api}/categories`, categoriesRoutes)
 app.use(`${api}/users`, usersRoutes)
 app.use(`${api}/orders`, ordersRoutes)
