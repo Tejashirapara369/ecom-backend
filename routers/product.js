@@ -138,8 +138,6 @@ router.put('/:id', uploadOptions.single('image'), async (req, res) => {
     if(!prodItem) res.status(400).send({ success: false, message: 'Product not found!' })
 
     const file = req.file
-    let fileUrl;
-
     if(file) {
       fileUrl = `${req.protocol}://${req.get('host')}/public/upload/${req.file.filename}`
     } else {
@@ -152,7 +150,7 @@ router.put('/:id', uploadOptions.single('image'), async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         richDescription: req.body.richDescription,
-        image: req.body.image,
+        image: fileUrl,
         brand: req.body.brand,
         price: req.body.price,
         category: req.body.category,
