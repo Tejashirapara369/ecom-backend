@@ -24,13 +24,13 @@ router.post('/login', async (req, res) => {
 
   if (req.body && bcrypt.compareSync(req.body.password, user.passwordHash)) {
     const secretKey = process.env.SECRET_KEY
-    console.log('user.isAdmin', user.isAdmin)
     const token = jwt.sign(
       {
         userId: user.id,
         isAdmin: user.isAdmin,
       },
-      secretKey
+      secretKey,
+      { expiresIn: '1d' }
     )
 
     res.status(200).json({
@@ -121,19 +121,22 @@ router.put('/:id', async (req, res) => {
     ? bcrypt.hashSync(req.body.password, 10)
     : user.passwordHash
 
-  const updatedUser = await User.findByIdAndUpdate(req.params.id, {
-    name: req.body.name,
-    email: req.body.email,
-    passwordHash: passwordHash,
-    phone: req.body.phone,
-    isAdmin: req.body.isAdmin,
-    street: req.body.street,
-    apartment: req.body.apartment,
-    zip: req.body.zip,
-    city: req.body.city,
-    country: req.body.country,
-  },
-  { new: true })
+  const updatedUser = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      name: req.body.name,
+      email: req.body.email,
+      passwordHash: passwordHash,
+      phone: req.body.phone,
+      isAdmin: req.body.isAdmin,
+      street: req.body.street,
+      apartment: req.body.apartment,
+      zip: req.body.zip,
+      city: req.body.city,
+      country: req.body.country,
+    },
+    { new: true }
+  )
 
   if (updatedUser) res.status(200).send(updatedUser)
 })
@@ -158,6 +161,5 @@ router.delete('/:id', async (req, res) => {
       .send({ success: false, message: 'Something went wrong', error: e })
   }
 })
-
 
 module.exports = router
